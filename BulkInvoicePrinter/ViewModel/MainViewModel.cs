@@ -50,14 +50,7 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
 
                     WelcomeTitle = item.Title;
                 });
-        }
-
-        ////public override void Cleanup()
-        ////{
-        ////    // Clean up if needed
-
-        ////    base.Cleanup();
-        ////}
+        }   
 
         #region Properties
 
