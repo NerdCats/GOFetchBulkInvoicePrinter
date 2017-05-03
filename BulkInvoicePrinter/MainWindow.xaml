@@ -31,8 +31,10 @@
             FontSize="36"
             FontWeight="Bold"
             Foreground="Purple"
-            Text="{Binding WelcomeTitle}"
-            TextWrapping="Wrap" />
+            TextWrapping="Wrap">
+            <Run Text="{Binding WelcomeTitle}" />
+            <Run Text="{Binding JobIndex, Mode=OneWay}" />
+        </TextBlock>
 
         <TextBox
             Grid.Row="1"

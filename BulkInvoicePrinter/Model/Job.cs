@@ -28,5 +28,16 @@ namespace GOFetchBulkInvoicePrinter.Model
         public object Date { get; internal set; }
         public JToken[] Tasks { get; set; }
         public string DeliveryTime { get; internal set; }
+
+        public List<PackageItem> PackageItemList { get; set; } = new List<PackageItem>();
+    }
+
+    public class PackageItem
+    {
+        public string Item { get; set; }
+        public string Quantity { get; set; }
+        public string Price { get; set; }
+        public string Weight { get; set; }
+        public string Total { get; set; }
     }
 }
