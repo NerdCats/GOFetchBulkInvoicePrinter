@@ -106,14 +106,15 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
             {
                 LocalReport report = new LocalReport();
                 report.EnableExternalImages = true;
-                report.ReportEmbeddedResource = "BulkInvoicePrinter.Invoice.rdlc";
-                report.SetParameters(reportParameters);
 
                 ReportDataSource rds = new ReportDataSource();
                 rds.Name = "DataSet";
                 rds.Value = LoadSalesData(reportDataTable);
-
                 report.DataSources.Add(rds);
+
+                report.ReportEmbeddedResource = "GoFetchBulkInvoicePrinter.Invoice.rdlc";
+
+                report.SetParameters(reportParameters);
 
                 Export(report);
                 Print();

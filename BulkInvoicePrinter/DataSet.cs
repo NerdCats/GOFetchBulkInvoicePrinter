@@ -1,4 +1,4 @@
-﻿namespace BulkInvoicePrinter
+﻿namespace GoFetchBulkInvoicePrinter
 {
 
 
