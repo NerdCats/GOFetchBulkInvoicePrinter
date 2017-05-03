@@ -86,7 +86,7 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
             set { _JobIndex = value; base.RaisePropertyChanged("JobIndex"); }
         }
         #endregion
-        
+
         public List<string> JobIDList { get; set; } = new List<string>();
 
         public List<Job> FetchedJobs { get; set; } = new List<Job>();
@@ -117,6 +117,10 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
                                 InvoiceGet_Completed += MainViewModel_InvoiceGet_Completed;
                                 GetInvoice(JobIDList[JobIndex]);
                             }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Nothing to print. No Job IDs were pasted.", "Warning!", MessageBoxButton.OK, MessageBoxImage.Warning);
                         }
 
                     }));
@@ -217,12 +221,12 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
                     }
                     catch (System.Exception ex)
                     {
-                        MessageBox.Show(ex.Message, "Error parsing job!"); return;
+                        MessageBox.Show(ex.Message, "Error parsing job!", MessageBoxButton.OK, MessageBoxImage.Error); return;
                     }
                 }
 
             });
-        } 
+        }
 
         #endregion
     }
