@@ -20,22 +20,6 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
     {
         private readonly IDataService _dataService;
 
-        public const string WelcomeTitlePropertyName = "WelcomeTitle";
-
-        private string _welcomeTitle = string.Empty;
-
-        public string WelcomeTitle
-        {
-            get
-            {
-                return _welcomeTitle;
-            }
-            set
-            {
-                Set(ref _welcomeTitle, value);
-            }
-        }
-
         public MainViewModel(IDataService dataService)
         {
             _dataService = dataService;
@@ -52,9 +36,31 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
                 });
         }
 
-        #region Properties
+        public const string WelcomeTitlePropertyName = "WelcomeTitle";
 
         private event EventHandler InvoiceGet_Completed;
+
+        #region Properties
+
+        #region WelcomeTitle
+
+        private string _welcomeTitle = string.Empty;
+
+        public string WelcomeTitle
+        {
+            get
+            {
+                return _welcomeTitle;
+            }
+            set
+            {
+                Set(ref _welcomeTitle, value);
+            }
+        }
+
+        #endregion
+
+        #region JobIDs
 
         private string _JobIDs;
 
@@ -68,9 +74,9 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
             }
         }
 
-        public List<string> JobIDList { get; set; } = new List<string>();
+        #endregion
 
-        public List<Job> FetchedJobs { get; set; } = new List<Job>();
+        #region JobIndex
 
         private int _JobIndex = 0;
 
@@ -79,9 +85,15 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
             get { return _JobIndex; }
             set { _JobIndex = value; base.RaisePropertyChanged("JobIndex"); }
         }
+        #endregion
+        
+        public List<string> JobIDList { get; set; } = new List<string>();
 
+        public List<Job> FetchedJobs { get; set; } = new List<Job>();
 
         #endregion
+
+        #region Relay Commands
 
         private RelayCommand _PrintInvoices;
 
@@ -102,7 +114,6 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
                             if (JobIDList.Count > 0)
                             {
                                 JobIndex = 0;
-
                                 InvoiceGet_Completed += MainViewModel_InvoiceGet_Completed;
                                 GetInvoice(JobIDList[JobIndex]);
                             }
@@ -111,6 +122,10 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
                     }));
             }
         }
+
+        #endregion
+
+        #region Private Methods
 
         private void MainViewModel_InvoiceGet_Completed(object sender, EventArgs e)
         {
@@ -195,13 +210,10 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
 
                         JobIndex++;
 
-
-
                         if (InvoiceGet_Completed != null)
                         {
                             MainViewModel_InvoiceGet_Completed(true, null);
                         }
-
                     }
                     catch (System.Exception ex)
                     {
@@ -210,6 +222,8 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
                 }
 
             });
-        }
+        } 
+
+        #endregion
     }
 }
