@@ -22,5 +22,15 @@ namespace GoFetchBulkInvoicePrinter.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://fetchprod.gobd.co")]
+        public string TaskCatAddress {
+            get {
+                return ((string)(this["TaskCatAddress"]));
+            }
+        }
     }
 }
