@@ -25,7 +25,7 @@ namespace GOFetchBulkInvoicePrinter.Model
         public string SpecialNotetoDeliveryMan { get; set; }
 
         public JToken[] PackageList { get; set; }
-        public object Date { get; internal set; }
+        public string Date { get; set; }
         public JToken[] Tasks { get; set; }
         public string DeliveryTime { get; internal set; }
 

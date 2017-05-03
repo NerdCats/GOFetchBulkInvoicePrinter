@@ -7,6 +7,8 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using Microsoft.Reporting.WinForms;
+using BulkInvoicePrinter;
 
 namespace GOFetchBulkInvoicePrinter.ViewModel
 {
@@ -19,6 +21,8 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
     public class MainViewModel : ViewModelBase
     {
         private readonly IDataService _dataService;
+
+        private PrinterClass _printerClass;
 
         public MainViewModel(IDataService dataService)
         {
@@ -39,6 +43,9 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
         public const string WelcomeTitlePropertyName = "WelcomeTitle";
 
         private event EventHandler InvoiceGet_Completed;
+
+        List<ReportParameter> reportParameters = new List<ReportParameter>();
+        ReportParameter prCredentials = new ReportParameter();
 
         #region Properties
 
@@ -214,6 +221,8 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
 
                         JobIndex++;
 
+                        SendToPrinter(job);
+
                         if (InvoiceGet_Completed != null)
                         {
                             MainViewModel_InvoiceGet_Completed(true, null);
@@ -226,6 +235,62 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
                 }
 
             });
+        }
+
+        private void SendToPrinter(Job job)
+        {
+            reportParameters = new List<ReportParameter>();
+
+            prCredentials = new ReportParameter("TrackingNo", job.TrackingNo);
+            reportParameters.Add(prCredentials);
+
+            prCredentials = new ReportParameter("ReferenceInvoiceId", job.ReferenceInvoiceId);
+            reportParameters.Add(prCredentials);
+
+            prCredentials = new ReportParameter("Date", job.Date);
+            reportParameters.Add(prCredentials);
+
+            prCredentials = new ReportParameter("PaymentMethod", job.PaymentMethod);
+            reportParameters.Add(prCredentials);
+
+            prCredentials = new ReportParameter("PickupBy", job.PickupBy);
+            reportParameters.Add(prCredentials);
+
+            prCredentials = new ReportParameter("DeliveryBy", job.DeliveryBy);
+            reportParameters.Add(prCredentials);
+
+            prCredentials = new ReportParameter("CashDeliveryBy", job.CashDeliveryBy);
+            reportParameters.Add(prCredentials);
+
+            prCredentials = new ReportParameter("PickupTime", job.PickupTime);
+            reportParameters.Add(prCredentials);
+
+            prCredentials = new ReportParameter("PickupAddress", job.PickupAddress);
+            reportParameters.Add(prCredentials);
+
+            prCredentials = new ReportParameter("DeliveryTime", job.DeliveryTime);
+            reportParameters.Add(prCredentials);
+
+            prCredentials = new ReportParameter("DeliveryAddress", job.DeliveryAddress);
+            reportParameters.Add(prCredentials);
+
+            prCredentials = new ReportParameter("ServiceCharge", job.ServiceCharge);
+            reportParameters.Add(prCredentials);
+
+            prCredentials = new ReportParameter("TotalToPay", job.TotalToPay);
+            reportParameters.Add(prCredentials);
+
+            prCredentials = new ReportParameter("SpecialNotetoDeliveryMan", job.SpecialNotetoDeliveryMan);
+            reportParameters.Add(prCredentials);
+
+            DataSet.PackageListDataTable pldt = new DataSet.PackageListDataTable();
+
+            foreach (var citem in job.PackageItemList)
+            {
+                pldt.AddPackageListRow(citem.Item, citem.Quantity, citem.Price, citem.Weight, citem.Total);
+            }
+
+            _printerClass.Run(pldt, reportParameters);
         }
 
         #endregion
