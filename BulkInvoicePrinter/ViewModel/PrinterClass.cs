@@ -7,6 +7,7 @@ using System.Drawing.Imaging;
 using System.Drawing.Printing;
 using Microsoft.Reporting.WinForms;
 using System.Drawing;
+using System.Windows;
 
 namespace GOFetchBulkInvoicePrinter.ViewModel
 {
@@ -101,13 +102,26 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
         //    export the report to an .emf file, and print it.
         public void Run(DataTable reportDataTable, List<ReportParameter> reportParameters)
         {
-            LocalReport report = new LocalReport();
-            report.ReportPath = "Invoice.rdlc";
-            report.DataSources.Add(
-               new ReportDataSource("DataSet", LoadSalesData(reportDataTable)));
-            report.SetParameters(reportParameters);
-            Export(report);
-            Print();
+            try
+            {
+                LocalReport report = new LocalReport();
+                report.EnableExternalImages = true;
+                report.ReportEmbeddedResource = "BulkInvoicePrinter.Invoice.rdlc";
+                report.SetParameters(reportParameters);
+
+                ReportDataSource rds = new ReportDataSource();
+                rds.Name = "DataSet";
+                rds.Value = LoadSalesData(reportDataTable);
+
+                report.DataSources.Add(rds);
+
+                Export(report);
+                Print();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         public void Dispose()
