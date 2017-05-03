@@ -145,6 +145,7 @@
           </Textbox>
           <Textbox Name="Textbox3">
             <CanGrow>true</CanGrow>
+            <CanShrink>true</CanShrink>
             <KeepTogether>true</KeepTogether>
             <Paragraphs>
               <Paragraph>
@@ -1386,7 +1387,7 @@
         <BottomMargin>0cm</BottomMargin>
         <ColumnSpacing>1.27cm</ColumnSpacing>
         <Style />
-      </Page>   
+      </Page>    
   <ReportParameters>
     <ReportParameter Name="TrackingNo">
       <DataType>String</DataType>
