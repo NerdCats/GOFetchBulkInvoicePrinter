@@ -35,9 +35,9 @@ namespace GOFetchBulkInvoicePrinter.Model
     public class PackageItem
     {
         public string Item { get; set; }
-        public string Quantity { get; set; }
-        public string Price { get; set; }
-        public string Weight { get; set; }
-        public string Total { get; set; }
+        public decimal Quantity { get; set; }
+        public decimal Price { get; set; }
+        public decimal Weight { get; set; }
+        public decimal Total { get; set; }
     }
 }

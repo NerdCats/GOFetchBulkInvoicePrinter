@@ -201,10 +201,10 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
                             PackageItem pi = new PackageItem()
                             {
                                 Item = (string)citem.SelectToken("Item"),
-                                Quantity = (string)citem.SelectToken("Quantity"),
-                                Price = (string)citem.SelectToken("Price"),
-                                Weight = (string)citem.SelectToken("Weight"),
-                                Total = (string)citem.SelectToken("Total"),
+                                Quantity = (decimal)citem.SelectToken("Quantity"),
+                                Price = (decimal)citem.SelectToken("Price"),
+                                Weight = (decimal)citem.SelectToken("Weight"),
+                                Total = (decimal)citem.SelectToken("Total"),
                             };
 
                             job.PackageItemList.Add(pi);
