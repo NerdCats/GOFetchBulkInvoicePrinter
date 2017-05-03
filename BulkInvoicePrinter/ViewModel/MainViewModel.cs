@@ -41,9 +41,7 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
         }
 
         public const string WelcomeTitlePropertyName = "WelcomeTitle";
-
         private event EventHandler InvoiceGet_Completed;
-
         List<ReportParameter> reportParameters = new List<ReportParameter>();
         ReportParameter prCredentials = new ReportParameter();
 
@@ -114,6 +112,7 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
                     {
                         if (!string.IsNullOrEmpty(JobIDs))
                         {
+                            JobIDs = JobIDs.Trim();
                             JobIDList = new List<string>();
                             JobIDList = (JobIDs.Contains(",")) ? JobIDs.Split(',').ToList() : JobIDs.Split(' ').ToList();
                             FetchedJobs = new List<Job>();
