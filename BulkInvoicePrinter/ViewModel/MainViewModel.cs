@@ -114,7 +114,7 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
 
         private void MainViewModel_InvoiceGet_Completed(object sender, EventArgs e)
         {
-            if (JobIndex <= JobIDList.Count)
+            if (JobIndex < JobIDList.Count)
             {
                 GetInvoice(JobIDList[JobIndex]);
             }
@@ -194,6 +194,8 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
                         FetchedJobs.Add(job);
 
                         JobIndex++;
+
+
 
                         if (InvoiceGet_Completed != null)
                         {
