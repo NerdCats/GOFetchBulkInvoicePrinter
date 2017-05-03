@@ -20,11 +20,7 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
         private DataTable LoadSalesData(DataTable reportDataTable)
         {
             // Create a new DataSet and read sales data file 
-            //    data.xml into the first DataTable.
-
-            //DataSet dataSet = new DataSet();
-            //dataSet.ReadXml(@"..\..\data.xml");
-            //return dataSet.Tables[0];
+            //    data.xml into the first DataTable.          
 
             return reportDataTable;
         }
@@ -51,10 +47,10 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
                 <MarginRight>0.0in</MarginRight>
                 <MarginBottom>0.0in</MarginBottom>
             </DeviceInfo>";
+
             Warning[] warnings;
             m_streams = new List<Stream>();
-            report.Render("Image", deviceInfo, CreateStream,
-               out warnings);
+            report.Render("Image", deviceInfo, CreateStream, out warnings);
             foreach (Stream stream in m_streams)
                 stream.Position = 0;
         }
@@ -86,6 +82,7 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
         {
             if (m_streams == null || m_streams.Count == 0)
                 throw new Exception("Error: no stream to print.");
+
             PrintDocument printDoc = new PrintDocument();
             if (!printDoc.PrinterSettings.IsValid)
             {
@@ -121,7 +118,7 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.InnerException.Message, ex.Message, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

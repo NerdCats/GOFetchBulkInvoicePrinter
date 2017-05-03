@@ -144,6 +144,10 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
             {
                 GetInvoice(JobIDList[JobIndex]);
             }
+            else
+            {
+                _printerClass.Dispose();
+            }
         }
 
         private void GetInvoice(string JobID)
@@ -152,7 +156,7 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
             {
                 if (err != null)
                 {
-                    MessageBox.Show(err.Message, "Error!"); return;
+                    MessageBox.Show(err.InnerException.Message, err.Message); return;
                 }
 
                 if (res != null)
@@ -230,7 +234,7 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
                     }
                     catch (System.Exception ex)
                     {
-                        MessageBox.Show(ex.Message, "Error parsing job!", MessageBoxButton.OK, MessageBoxImage.Error); return;
+                        MessageBox.Show(ex.InnerException.Message, ex.Message, MessageBoxButton.OK, MessageBoxImage.Error); return;
                     }
                 }
 
@@ -296,7 +300,7 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message,"Error processing report!", MessageBoxButton.OK, MessageBoxImage.Error); return;
+                MessageBox.Show(ex.InnerException.Message, ex.Message, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
