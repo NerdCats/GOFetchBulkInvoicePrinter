@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
     <DataSource Name="DataSet">
@@ -48,8 +48,8 @@
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
-  <!--<ReportSections>
-    <ReportSection>-->
+  <ReportSections>
+    <ReportSection>
       <Body>
         <ReportItems>
           <Image Name="Image1">
@@ -234,7 +234,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>1.44125in</Top>
+            <Top>1.45375in</Top>
             <Left>0.14458in</Left>
             <Height>0.73958in</Height>
             <Width>2.82292in</Width>
@@ -328,7 +328,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox5</rd:DefaultName>
-            <Top>2.32319in</Top>
+            <Top>2.31069in</Top>
             <Left>0.14458in</Left>
             <Height>0.60417in</Height>
             <Width>2.82292in</Width>
@@ -396,7 +396,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox5</rd:DefaultName>
-            <Top>3.05687in</Top>
+            <Top>3.03187in</Top>
             <Left>0.14458in</Left>
             <Height>0.60417in</Height>
             <Width>2.82292in</Width>
@@ -412,7 +412,7 @@
             </Style>
           </Textbox>
           <Line Name="Line3">
-            <Top>2.99646in</Top>
+            <Top>2.97146in</Top>
             <Left>0.16334in</Left>
             <Height>0in</Height>
             <Width>2.82292in</Width>
@@ -425,7 +425,7 @@
             </Style>
           </Line>
           <Line Name="Line4">
-            <Top>3.72146in</Top>
+            <Top>3.69646in</Top>
             <Left>0.16334in</Left>
             <Height>0in</Height>
             <Width>2.82292in</Width>
@@ -1120,20 +1120,21 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>DataSet</DataSetName>
-            <Top>3.7925in</Top>
+            <Top>3.7675in</Top>
             <Left>0.14458in</Left>
             <Height>1.5625in</Height>
             <Width>2.84168in</Width>
             <ZIndex>10</ZIndex>
             <Style>
               <Border>
+                <Color>White</Color>
                 <Style>None</Style>
               </Border>
               <FontFamily>Calibri</FontFamily>
             </Style>
           </Tablix>
           <Line Name="Line5">
-            <Top>5.40896in</Top>
+            <Top>5.38396in</Top>
             <Left>0.16334in</Left>
             <Height>0in</Height>
             <Width>2.82292in</Width>
@@ -1388,8 +1389,8 @@
         <ColumnSpacing>1.27cm</ColumnSpacing>
         <Style />
       </Page>
-    <!--</ReportSection>
-  </ReportSections>-->
+    </ReportSection>
+  </ReportSections>
   <ReportParameters>
     <ReportParameter Name="TrackingNo">
       <DataType>String</DataType>
@@ -1476,10 +1477,10 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>
-  <!--<ReportParametersLayout>
+  <ReportParametersLayout>
     <GridLayoutDefinition>
-      <NumberOfColumns>4</NumberOfColumns>
-      <NumberOfRows>4</NumberOfRows>
+      <NumberOfColumns>2</NumberOfColumns>
+      <NumberOfRows>7</NumberOfRows>
       <CellDefinitions>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
@@ -1492,68 +1493,68 @@
           <ParameterName>ReferenceInvoiceId</ParameterName>
         </CellDefinition>
         <CellDefinition>
-          <ColumnIndex>2</ColumnIndex>
-          <RowIndex>0</RowIndex>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>1</RowIndex>
           <ParameterName>Date</ParameterName>
         </CellDefinition>
         <CellDefinition>
-          <ColumnIndex>3</ColumnIndex>
-          <RowIndex>0</RowIndex>
+          <ColumnIndex>1</ColumnIndex>
+          <RowIndex>1</RowIndex>
           <ParameterName>PaymentMethod</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
-          <RowIndex>1</RowIndex>
+          <RowIndex>2</RowIndex>
           <ParameterName>PickupBy</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>1</ColumnIndex>
-          <RowIndex>1</RowIndex>
+          <RowIndex>2</RowIndex>
           <ParameterName>DeliveryBy</ParameterName>
         </CellDefinition>
         <CellDefinition>
-          <ColumnIndex>2</ColumnIndex>
-          <RowIndex>1</RowIndex>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>3</RowIndex>
           <ParameterName>CashDeliveryBy</ParameterName>
         </CellDefinition>
         <CellDefinition>
-          <ColumnIndex>3</ColumnIndex>
-          <RowIndex>1</RowIndex>
+          <ColumnIndex>1</ColumnIndex>
+          <RowIndex>3</RowIndex>
           <ParameterName>PickupTime</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
-          <RowIndex>2</RowIndex>
+          <RowIndex>4</RowIndex>
           <ParameterName>PickupAddress</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>1</ColumnIndex>
-          <RowIndex>2</RowIndex>
+          <RowIndex>4</RowIndex>
           <ParameterName>DeliveryTime</ParameterName>
         </CellDefinition>
         <CellDefinition>
-          <ColumnIndex>2</ColumnIndex>
-          <RowIndex>2</RowIndex>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>5</RowIndex>
           <ParameterName>DeliveryAddress</ParameterName>
         </CellDefinition>
         <CellDefinition>
-          <ColumnIndex>3</ColumnIndex>
-          <RowIndex>2</RowIndex>
+          <ColumnIndex>1</ColumnIndex>
+          <RowIndex>5</RowIndex>
           <ParameterName>ServiceCharge</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
-          <RowIndex>3</RowIndex>
+          <RowIndex>6</RowIndex>
           <ParameterName>TotalToPay</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>1</ColumnIndex>
-          <RowIndex>3</RowIndex>
+          <RowIndex>6</RowIndex>
           <ParameterName>SpecialNotetoDeliveryMan</ParameterName>
         </CellDefinition>
       </CellDefinitions>
     </GridLayoutDefinition>
-  </ReportParametersLayout>-->
+  </ReportParametersLayout>
   <EmbeddedImages>
     <EmbeddedImage Name="logo">
       <MIMEType>image/png</MIMEType>
