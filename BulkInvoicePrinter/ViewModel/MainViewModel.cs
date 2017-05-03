@@ -38,6 +38,8 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
 
                     WelcomeTitle = item.Title;
                 });
+
+            this.PrintButtonIsEnabled = true;
         }
 
         public const string WelcomeTitlePropertyName = "WelcomeTitle";
@@ -46,6 +48,23 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
         ReportParameter prCredentials = new ReportParameter();
 
         #region Properties
+
+        #region PrintButtonIsEnabled
+
+        private bool _PrintButtonIsEnabled;
+
+        public bool PrintButtonIsEnabled
+        {
+            get { return _PrintButtonIsEnabled; }
+            set
+            {
+                _PrintButtonIsEnabled = value;
+                base.RaisePropertyChanged("PrintButtonIsEnabled");
+            }
+        }
+
+
+        #endregion
 
         #region WelcomeTitle
 
@@ -110,23 +129,41 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
                     ?? (_PrintInvoices = new RelayCommand(
                     () =>
                     {
-                        if (!string.IsNullOrEmpty(JobIDs))
+                        try
                         {
-                            JobIDs = JobIDs.Trim();
-                            JobIDList = new List<string>();
-                            JobIDList = (JobIDs.Contains(",")) ? JobIDs.Split(',').ToList() : JobIDs.Split(' ').ToList();
-                            FetchedJobs = new List<Job>();
-
-                            if (JobIDList.Count > 0)
+                            if (!string.IsNullOrEmpty(JobIDs))
                             {
-                                JobIndex = 0;
-                                InvoiceGet_Completed += MainViewModel_InvoiceGet_Completed;
-                                GetInvoice(JobIDList[JobIndex]);
+                                this.PrintButtonIsEnabled = false;
+
+                                JobIDs = JobIDs.Trim();
+                                JobIDList = new List<string>();
+                                JobIDList = (JobIDs.Contains(",")) ? JobIDs.Split(',').ToList() : JobIDs.Split(' ').ToList();
+                                if (JobIDList[JobIndex].Length > 12)
+                                {
+                                    MessageBox.Show("Sorry! Looks like the text you pasted is not a colection of Job IDs. Try again.", "Warning!", MessageBoxButton.OK, MessageBoxImage.Warning); this.PrintButtonIsEnabled = true; return;
+                                }
+                                if (!JobIDList[JobIndex].StartsWith("Job"))
+                                {
+                                    MessageBox.Show("Sorry! Looks like the text you pasted is not a colection of Job IDs. Try again.", "Warning!", MessageBoxButton.OK, MessageBoxImage.Warning); this.PrintButtonIsEnabled = true; return;
+                                }
+
+                                FetchedJobs = new List<Job>();
+
+                                if (JobIDList.Count > 0)
+                                {
+                                    JobIndex = 0;
+                                    InvoiceGet_Completed += MainViewModel_InvoiceGet_Completed;
+                                    GetInvoice(JobIDList[JobIndex]);
+                                }
+                            }
+                            else
+                            {
+                                MessageBox.Show("Nothing to print. No Job IDs were pasted.", "Warning!", MessageBoxButton.OK, MessageBoxImage.Warning); this.PrintButtonIsEnabled = true;
                             }
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            MessageBox.Show("Nothing to print. No Job IDs were pasted.", "Warning!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            MessageBox.Show(ex.InnerException.Message, ex.Message, MessageBoxButton.OK, MessageBoxImage.Error); this.PrintButtonIsEnabled = true; return;
                         }
 
                     }));
@@ -146,98 +183,106 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
             else
             {
                 _printerClass.Dispose();
+                this.PrintButtonIsEnabled = true;
             }
         }
 
         private void GetInvoice(string JobID)
         {
-            _dataService.GetJob(JobID, (res, err) =>
+            try
             {
-                if (err != null)
+                _dataService.GetJob(JobID, (res, err) =>
                 {
-                    MessageBox.Show(err.InnerException.Message, err.Message); return;
-                }
 
-                if (res != null)
-                {
-                    try
+                    if (err != null)
                     {
-                        Job job = new Job()
+                        MessageBox.Show(err.Message, err.Message); return;
+                    }
+
+                    if (res != null)
+                    {
+                        try
                         {
-                            TrackingNo = (string)res.SelectToken("HRID"),
-                            ReferenceInvoiceId = (string)res.SelectToken("Order.ReferenceInvoiceId"),
-                            Date = DateTime.Today.ToLongDateString(),
-                            PaymentMethod = (string)res.SelectToken("PaymentMethod"),
-                            Assets = JObject.Parse(res["Assets"].ToString()),
-                            Tasks = res.SelectToken("Tasks").ToArray(),
-                        };
-
-                        string tasks1, tasks2, tasks3 = string.Empty;
-
-                        tasks1 = (string)job.Tasks[1].SelectToken("AssetRef");
-                        tasks2 = (string)job.Tasks[2].SelectToken("AssetRef");
-
-                        if (job.Tasks.Count() > 3)
-                        {
-                            tasks3 = (string)job.Tasks[3].SelectToken("AssetRef");
-                        }
-
-                        Dictionary<string, string> assetnames = new Dictionary<string, string>();
-                        foreach (var item in job.Assets)
-                        {
-                            assetnames.Add((string)item.Key, (string)item.Value.SelectToken("UserName"));
-                        }
-
-                        job.PickupBy = assetnames.FirstOrDefault(x => x.Key == tasks1).Value;
-                        job.DeliveryBy = assetnames.FirstOrDefault(x => x.Key == tasks2).Value;
-                        job.CashDeliveryBy = job.Tasks.Count() > 3 ? assetnames.FirstOrDefault(x => x.Key == tasks3).Value : "";
-
-                        job.PickupTime = (string)job.Tasks[1].SelectToken("ETA");
-                        job.PickupAddress = (string)res.SelectToken("Order.From.AddressLine1");
-
-                        job.ServiceCharge = (string)res.SelectToken("Order.OrderCart.ServiceCharge");
-                        job.TotalToPay = (string)res.SelectToken("Order.OrderCart.TotalToPay");
-                        job.SpecialNotetoDeliveryMan = (string)res.SelectToken("Order.NoteToDeliveryMan");
-                        job.Order = JObject.Parse(res["Order"].ToString());
-                        job.OrderCart = JObject.Parse(job.Order["OrderCart"].ToString());
-                        job.PackageList = job.OrderCart.SelectToken("PackageList").ToArray();
-
-                        job.DeliveryTime = (string)job.Tasks[2].SelectToken("ETA");
-                        job.DeliveryAddress = (string)res.SelectToken("Order.To.AddressLine1");
-                        job.PackageList = job.OrderCart.SelectToken("PackageList").ToArray();
-
-                        foreach (var citem in job.PackageList)
-                        {
-                            PackageItem pi = new PackageItem()
+                            Job job = new Job()
                             {
-                                Item = (string)citem.SelectToken("Item"),
-                                Quantity = (decimal)citem.SelectToken("Quantity"),
-                                Price = (decimal)citem.SelectToken("Price"),
-                                Weight = (decimal)citem.SelectToken("Weight"),
-                                Total = (decimal)citem.SelectToken("Total"),
+                                TrackingNo = (string)res.SelectToken("HRID"),
+                                ReferenceInvoiceId = (string)res.SelectToken("Order.ReferenceInvoiceId"),
+                                Date = DateTime.Today.ToLongDateString(),
+                                PaymentMethod = (string)res.SelectToken("PaymentMethod"),
+                                Assets = JObject.Parse(res["Assets"].ToString()),
+                                Tasks = res.SelectToken("Tasks").ToArray(),
                             };
 
-                            job.PackageItemList.Add(pi);
+                            string tasks1, tasks2, tasks3 = string.Empty;
+
+                            tasks1 = (string)job.Tasks[1].SelectToken("AssetRef");
+                            tasks2 = (string)job.Tasks[2].SelectToken("AssetRef");
+
+                            if (job.Tasks.Count() > 3)
+                            {
+                                tasks3 = (string)job.Tasks[3].SelectToken("AssetRef");
+                            }
+
+                            Dictionary<string, string> assetnames = new Dictionary<string, string>();
+                            foreach (var item in job.Assets)
+                            {
+                                assetnames.Add((string)item.Key, (string)item.Value.SelectToken("UserName"));
+                            }
+
+                            job.PickupBy = assetnames.FirstOrDefault(x => x.Key == tasks1).Value;
+                            job.DeliveryBy = assetnames.FirstOrDefault(x => x.Key == tasks2).Value;
+                            job.CashDeliveryBy = job.Tasks.Count() > 3 ? assetnames.FirstOrDefault(x => x.Key == tasks3).Value : "";
+
+                            job.PickupTime = (string)job.Tasks[1].SelectToken("ETA");
+                            job.PickupAddress = (string)res.SelectToken("Order.From.AddressLine1");
+
+                            job.ServiceCharge = (string)res.SelectToken("Order.OrderCart.ServiceCharge");
+                            job.TotalToPay = (string)res.SelectToken("Order.OrderCart.TotalToPay");
+                            job.SpecialNotetoDeliveryMan = (string)res.SelectToken("Order.NoteToDeliveryMan");
+                            job.Order = JObject.Parse(res["Order"].ToString());
+                            job.OrderCart = JObject.Parse(job.Order["OrderCart"].ToString());
+                            job.PackageList = job.OrderCart.SelectToken("PackageList").ToArray();
+
+                            job.DeliveryTime = (string)job.Tasks[2].SelectToken("ETA");
+                            job.DeliveryAddress = (string)res.SelectToken("Order.To.AddressLine1");
+                            job.PackageList = job.OrderCart.SelectToken("PackageList").ToArray();
+
+                            foreach (var citem in job.PackageList)
+                            {
+                                PackageItem pi = new PackageItem()
+                                {
+                                    Item = (string)citem.SelectToken("Item"),
+                                    Quantity = (decimal)citem.SelectToken("Quantity"),
+                                    Price = (decimal)citem.SelectToken("Price"),
+                                    Weight = (decimal)citem.SelectToken("Weight"),
+                                    Total = (decimal)citem.SelectToken("Total"),
+                                };
+
+                                job.PackageItemList.Add(pi);
+                            }
+
+                            FetchedJobs.Add(job);
+
+                            JobIndex++;
+
+                            SendToPrinter(job);
+
+                            if (InvoiceGet_Completed != null)
+                            {
+                                MainViewModel_InvoiceGet_Completed(true, null);
+                            }
                         }
-
-                        FetchedJobs.Add(job);
-
-                        JobIndex++;
-
-                        SendToPrinter(job);
-
-                        if (InvoiceGet_Completed != null)
+                        catch (System.Exception ex)
                         {
-                            MainViewModel_InvoiceGet_Completed(true, null);
+                            MessageBox.Show(ex.InnerException.Message, ex.Message, MessageBoxButton.OK, MessageBoxImage.Error); return;
                         }
                     }
-                    catch (System.Exception ex)
-                    {
-                        MessageBox.Show(ex.InnerException.Message, ex.Message, MessageBoxButton.OK, MessageBoxImage.Error); return;
-                    }
-                }
-
-            });
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.InnerException.Message, ex.Message, MessageBoxButton.OK, MessageBoxImage.Error); this.PrintButtonIsEnabled = true; return;
+            }
         }
 
         private void SendToPrinter(Job job)
