@@ -16,14 +16,6 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
         private int m_currentPageIndex;
         private IList<Stream> m_streams;
 
-
-        private DataTable LoadSalesData(DataTable reportDataTable)
-        {
-            // Create a new DataSet and read sales data file 
-            //    data.xml into the first DataTable.          
-
-            return reportDataTable;
-        }
         // Routine to provide to the report renderer, in order to
         //    save an image for each page of the report.
         private Stream CreateStream(string name,
@@ -97,7 +89,7 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
         }
         // Create a local report for Report.rdlc, load the data,
         //    export the report to an .emf file, and print it.
-        public void Run(DataTable reportDataTable, List<ReportParameter> reportParameters)
+        public void Run(DataTable reportDataTable, List<ReportParameter> reportParameters, string reportResource)
         {
             try
             {
@@ -106,11 +98,10 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
 
                 ReportDataSource rds = new ReportDataSource();
                 rds.Name = "DataSet";
-                rds.Value = LoadSalesData(reportDataTable);
+                rds.Value = reportDataTable;
                 report.DataSources.Add(rds);
 
-                report.ReportEmbeddedResource = "GoFetchBulkInvoicePrinter.Invoice.rdlc";
-
+                report.ReportEmbeddedResource = reportResource;
                 report.SetParameters(reportParameters);
 
                 Export(report);

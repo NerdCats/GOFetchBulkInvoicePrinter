@@ -18,15 +18,7 @@ namespace GOFetchBulkInvoicePrinter.Model
         {
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
-
-        public void GetData(Action<DataItem, Exception> callback)
-        {
-            // Use this to connect to the actual data service
-
-            var item = new DataItem("Paste Job IDs to start bulk printing.");
-            callback(item, null);
-        }
-
+        
         public async void GetJob(string JOBID, Action<JObject, Exception> callback)
         {
             // Use this to connect to the actual data service

@@ -9,8 +9,6 @@ namespace GOFetchBulkInvoicePrinter.Model
 {
     public interface IDataService
     {
-        void GetData(Action<DataItem, Exception> callback);
-
         void GetJob(string JOBID, Action<JObject, Exception> callback);
     }
 }
