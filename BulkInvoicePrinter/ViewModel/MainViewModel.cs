@@ -192,7 +192,6 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
                                    MessageBox.Show(err.Message, err.Message); this.PrintButtonIsEnabled = true;
 
                                    JobIndex++;
-
                                    PropagateToNextJob();
 
                                    return;
@@ -270,7 +269,12 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
                                    }
                                    catch (System.Exception ex)
                                    {
-                                       MessageBox.Show(ex.InnerException.Message, ex.Message, MessageBoxButton.OK, MessageBoxImage.Error); this.PrintButtonIsEnabled = true; return;
+                                       MessageBox.Show(ex.InnerException.Message, ex.Message, MessageBoxButton.OK, MessageBoxImage.Error);
+                                       //this.PrintButtonIsEnabled = true; return;
+
+                                       JobIndex++;
+                                       PropagateToNextJob();
+                                       return;
                                    }
                                }
                                else
