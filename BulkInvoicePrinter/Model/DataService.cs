@@ -26,11 +26,19 @@ namespace GOFetchBulkInvoicePrinter.Model
             {
                 HttpResponseMessage response = await client.GetAsync(string.Format("/api/job/{0}/", JOBID));
                 response.EnsureSuccessStatusCode(); // Throw on error code.
-                string x = await response.Content.ReadAsStringAsync();
-                if (string.IsNullOrEmpty(x))
+
+                if (response.IsSuccessStatusCode)
                 {
-                    JObject jo = JObject.Parse(x);
-                    callback(jo, null);
+                    string x = await response.Content.ReadAsStringAsync();
+                    if (string.IsNullOrEmpty(x))
+                    {
+                        JObject jo = JObject.Parse(x);
+                        callback(jo, null);
+                    }
+                    else
+                    {
+                        callback(null, null);
+                    } 
                 }
                 else
                 {
