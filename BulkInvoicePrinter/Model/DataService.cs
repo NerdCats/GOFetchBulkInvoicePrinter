@@ -8,7 +8,6 @@ namespace GOFetchBulkInvoicePrinter.Model
 {
     public class DataService : IDataService
     {
-
         HttpClient client = new HttpClient()
         {
             BaseAddress = new Uri(System.Configuration.ConfigurationManager.ConnectionStrings["GOFetchBulkInvoicePrinter.Properties.Settings.TaskCatAddress"].ConnectionString),
