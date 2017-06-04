@@ -30,7 +30,7 @@ namespace GOFetchBulkInvoicePrinter.Model
                 if (response.IsSuccessStatusCode)
                 {
                     string x = await response.Content.ReadAsStringAsync();
-                    if (string.IsNullOrEmpty(x))
+                    if (!string.IsNullOrEmpty(x))
                     {
                         JObject jo = JObject.Parse(x);
                         callback(jo, null);

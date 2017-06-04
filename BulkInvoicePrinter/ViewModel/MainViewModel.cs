@@ -11,13 +11,7 @@ using Microsoft.Reporting.WinForms;
 using GoFetchBulkInvoicePrinter;
 
 namespace GOFetchBulkInvoicePrinter.ViewModel
-{
-    /// <summary>
-    /// This class contains properties that the main View can data bind to.
-    /// <para>
-    /// See http://www.mvvmlight.net
-    /// </para>
-    /// </summary>
+{    
     public class MainViewModel : ViewModelBase
     {
         private readonly IDataService _dataService;
@@ -37,6 +31,18 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
         ReportParameter prCredentials = new ReportParameter();
 
         #region Properties
+
+        #region PrintingStatus
+
+        private string _PrintingStatus = "Idle";
+
+        public string PrintingStatus
+        {
+            get { return _PrintingStatus; }
+            set { _PrintingStatus = value; base.RaisePropertyChanged("PrintingStatus"); }
+        }
+        
+        #endregion
 
         #region PrintButtonIsEnabled
 
@@ -186,7 +192,6 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
                 {
                     _dataService.GetJob(JobID, (res, err) =>
                            {
-
                                if (err != null)
                                {
                                    MessageBox.Show(err.Message, err.Message); this.PrintButtonIsEnabled = true;
@@ -263,14 +268,14 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
 
                                        JobIndex++;
 
+                                       this.PrintingStatus = "Printing";
                                        SendToPrinter(job);
-
+                                       this.PrintingStatus = "Idle";
                                        PropagateToNextJob();
                                    }
                                    catch (System.Exception ex)
                                    {
-                                       MessageBox.Show(ex.InnerException.Message, ex.Message, MessageBoxButton.OK, MessageBoxImage.Error);
-                                       //this.PrintButtonIsEnabled = true; return;
+                                       MessageBox.Show(ex.InnerException.Message, ex.Message, MessageBoxButton.OK, MessageBoxImage.Error);                                       
 
                                        JobIndex++;
                                        PropagateToNextJob();
@@ -279,6 +284,8 @@ namespace GOFetchBulkInvoicePrinter.ViewModel
                                }
                                else
                                {
+                                   MessageBox.Show(string.Format("{0} Job not found. Press 'OK' to go to next job.", JobID), "", MessageBoxButton.OK, MessageBoxImage.Error);
+
                                    JobIndex++;
                                    PropagateToNextJob();
                                }

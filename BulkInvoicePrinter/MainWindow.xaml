@@ -55,9 +55,17 @@
         <TextBlock
             Grid.Row="3"
             Margin="10,0,10,0"
+            HorizontalAlignment="Left"
             FontStyle="Italic"
-            Text="Made with love by NerdCats"
-            TextAlignment="Right" />
+            TextAlignment="Left">
+            <Run Text="Made with love by NerdCats" />
+        </TextBlock>
+
+        <TextBlock
+            Grid.Row="3"
+            Margin="10,0,10,0"
+            HorizontalAlignment="Right"
+            Text="{Binding PrintingStatus, Mode=OneWay}" />
 
     </Grid>
 </Window>
