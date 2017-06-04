@@ -1243,8 +1243,8 @@
               <TextRun>
                 <Value>="*"+Parameters!TrackingNo.Value+"*"</Value>
                 <Style>
-                  <FontFamily>3 of 9 Barcode</FontFamily>
-                  <FontSize>20pt</FontSize>
+                  <FontFamily>IDAutomationHC39M Free Version</FontFamily>
+                  <FontSize>9pt</FontSize>
                 </Style>
               </TextRun>
             </TextRuns>
@@ -1256,7 +1256,7 @@
         <rd:DefaultName>Textbox47</rd:DefaultName>
         <Top>6.71542in</Top>
         <Left>0.14458in</Left>
-        <Height>0.30208in</Height>
+        <Height>0.52847in</Height>
         <Width>2.84168in</Width>
         <ZIndex>16</ZIndex>
         <Style>
@@ -1303,7 +1303,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox48</rd:DefaultName>
-        <Top>7.24875in</Top>
+        <Top>7.49875in</Top>
         <Left>0.14458in</Left>
         <Height>0.40625in</Height>
         <Width>2.84168in</Width>
@@ -1333,7 +1333,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox50</rd:DefaultName>
-        <Top>7.06333in</Top>
+        <Top>7.31333in</Top>
         <Left>0.14458in</Left>
         <Height>0.14792in</Height>
         <Width>2.83961in</Width>
@@ -1349,7 +1349,7 @@
         </Style>
       </Textbox>
     </ReportItems>
-    <Height>20.21105cm</Height>
+    <Height>20.3698cm</Height>
     <Style />
   </Body>
   <Width>8cm</Width>
